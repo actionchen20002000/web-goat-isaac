@@ -4,6 +4,10 @@ stages:
   - push
   - dast
 
+include:
+  - template: SAST.gitlab-ci.yml
+  - template: DAST.gitlab-ci.yml
+
 cache:
   policy: pull
   key: ${CI_COMMIT_SHORT_SHA}
@@ -29,11 +33,6 @@ build:
 services:
   - name: docker:dind
     alias: dind
-
-
-include:
-  - template: SAST.gitlab-ci.yml
-  - template: DAST.gitlab-ci.yml
 
 sast:
   stage: analyze
