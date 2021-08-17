@@ -2,6 +2,7 @@ stages:
   - build
   - analyze
   - push
+  - dast
 
 cache:
   policy: pull
@@ -32,6 +33,7 @@ services:
 
 include:
   - template: SAST.gitlab-ci.yml
+  - template: DAST.gitlab-ci.yml
 
 sast:
   stage: analyze
@@ -67,3 +69,25 @@ push:
     - docker build --build-arg webgoat_version=v8.1.0 --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY_IMAGE:latest
+
+services:
+  - name: $CI_REGISTRY_IMAGE:latest
+    alias: webgoat
+
+dast:
+  variables:
+    GIT_STRATEGY: fetch
+    DAST_WEBSITE: http://webgoat:8080/WebGoat/
+    DAST_AUTH_URL: http://webgoat:8080/WebGoat/login
+    DAST_AUTH_EXCLUDE_URLS: http://webgoat:8080/WebGoat/logout,http://webgoat:8080/WebGoat/login,http://webgoat:8080/WebGoat/login?logout
+    DAST_FULL_SCAN_ENABLED: "true"
+    DAST_USERNAME: testtest
+    DAST_PASSWORD: password # use protected/masked variables, this is only for demonstration purposes
+    DAST_USERNAME_FIELD: username
+    DAST_PASSWORD_FIELD: password
+    DAST_AUTH_REPORT: "true"
+  before_script:
+    - curl -vvv -X POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc"
+  artifacts:
+    paths: [gl-dast-debug-auth-report.html]
+    when: always
