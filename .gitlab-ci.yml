@@ -1,0 +1,69 @@
+stages:
+  - build
+  - analyze
+  - push
+
+cache:
+  policy: pull
+  key: ${CI_COMMIT_SHORT_SHA}
+  paths:
+    - .m2/
+
+build:
+  stage: build
+  image: maven:3-jdk-11-slim
+  script:
+    - mvn clean install
+    - mvn package -Dmaven.repo.local=./.m2/
+  cache:
+    policy: push
+    key: ${CI_COMMIT_SHORT_SHA}
+    paths:
+      - .m2
+  artifacts:
+    paths:
+      - "webgoat-server/Dockerfile"
+      - "webgoat-server/target/webgoat-server-v8.1.0.jar"
+
+services:
+  - name: docker:dind
+    alias: dind
+
+
+include:
+  - template: SAST.gitlab-ci.yml
+
+sast:
+  stage: analyze
+  artifacts:
+    reports:
+      sast: gl-sast-report.json
+    paths:
+      - .m2/
+      - target/
+      - gl-sast-report.json
+
+spotbugs-sast:
+  dependencies:
+    - build
+  script:
+    - /analyzer run -compile=false
+  variables:
+    CI_DEBUG_TRACE: "true"
+    MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2/
+  artifacts:
+    reports:
+      sast: gl-sast-report.json
+    paths:
+      - gl-sast-report.json
+
+push:
+  image: docker:19.03.5
+  stage: push
+  script:
+    - cd webgoat-server
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - docker build --build-arg webgoat_version=v8.1.0 --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY_IMAGE:latest
