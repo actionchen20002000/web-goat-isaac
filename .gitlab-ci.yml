@@ -24,10 +24,6 @@ build:
       - "webgoat-server/Dockerfile"
       - "webgoat-server/target/webgoat-server-v8.1.0.jar"
 
-services:
-  - name: docker:dind
-    alias: dind
-
 sast:
   stage: analyze
   artifacts:
