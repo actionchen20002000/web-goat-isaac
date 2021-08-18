@@ -13,7 +13,7 @@ build:
   image: maven:3-jdk-11-slim
   script:
     - mvn clean install
-    - mvn package -Dmaven.repo.local=./.m2/
+    - mvn package -DskipTests -Dmaven.repo.local=./.m2/
   cache:
     policy: push
     key: ${CI_COMMIT_SHORT_SHA}
