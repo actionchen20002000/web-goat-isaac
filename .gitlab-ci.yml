@@ -18,7 +18,7 @@ build:
   stage: build
   image: maven:3-jdk-11-slim
   script:
-    - mvn clean install
+    - mvn clean
     - mvn package -Dmaven.repo.local=./.m2/
   cache:
     policy: push
