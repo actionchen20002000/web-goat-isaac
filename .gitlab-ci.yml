@@ -77,6 +77,7 @@ dast:
     DAST_USERNAME_FIELD: username
     DAST_PASSWORD_FIELD: password
     DAST_AUTH_REPORT: "true"
+    DAST_AUTH_VERIFICATION_URL: "http://webgoat:8080/WebGoat/start.mvc#lesson/WebGoatIntroduction.lesson"
   before_script:
     - curl -vvv -X POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc"
   artifacts:
