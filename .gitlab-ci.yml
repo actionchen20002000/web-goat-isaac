@@ -70,7 +70,7 @@ dast:
     GIT_STRATEGY: fetch
     DAST_WEBSITE: http://webgoat:8080/WebGoat/
     DAST_AUTH_URL: http://webgoat:8080/WebGoat/login
-    DAST_AUTH_EXCLUDE_URLS: http://webgoat:8080/WebGoat/logout,http://webgoat:8080/WebGoat/login,http://webgoat:8080/WebGoat/login?logout
+    DAST_EXCLUDE_URLS: http://webgoat:8080/WebGoat/logout,http://webgoat:8080/WebGoat/login,http://webgoat:8080/WebGoat/login?logout
     DAST_FULL_SCAN_ENABLED: "true"
     DAST_USERNAME: testtest
     DAST_PASSWORD: password # use protected/masked variables, this is only for demonstration purposes
