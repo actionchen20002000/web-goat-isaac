@@ -86,6 +86,7 @@ dast:
     DAST_AUTH_VERIFICATION_URL: "http://webgoat:8080/WebGoat/start.mvc#lesson/WebGoatIntroduction.lesson"
   before_script:
     - curl -vvv -X POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc"
+    - export DAST_WEBSITE=http://webgoat:8080/WebGoat/ # do it again as the DAST template does crappy work
   artifacts:
     paths: [gl-dast-debug-auth-report.html]
     when: always
