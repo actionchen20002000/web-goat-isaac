@@ -8,8 +8,8 @@ stages:
   - push
   - dast
 
-variables:
-  CI_DEBUG_TRACE: "true"
+#variables:
+  #CI_DEBUG_TRACE: "true"
 
 include:
   # - template: SAST.gitlab-ci.yml
@@ -69,8 +69,6 @@ include:
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY_IMAGE:latest
 
-
-
 dast:
   variables:
     GIT_STRATEGY: fetch
@@ -100,6 +98,8 @@ dast:
     - export DAST_AUTH_VERIFICATION_URL="http://webgoat:8080/WebGoat/start.mvc#lesson/WebGoatIntroduction.lesson"
     #- export DAST_ZAP_USE_AJAX_SPIDER=true
     - export DAST_BROWSER_SCAN=true
+    - export DAST_BROWSER_ACTION_TIMEOUT="30s"
+    - DAST_BROWSER_NUMBER_OF_BROWSERS=1
     #- export GIT_STRATEGY="fetch"
     #- export DAST_PATHS_FILE=dastpaths
     #- export DAST_PATHS="/WebGoat/start.mvc#lesson/SqlInjection.lesson/1,/WebGoat/start.mvc#lesson/SqlInjection.lesson/2,/WebGoat/start.mvc#lesson/SqlInjection.lesson/3,/WebGoat/start.mvc#lesson/SqlInjection.lesson/4,/WebGoat/start.mvc#lesson/SqlInjection.lesson/5"
