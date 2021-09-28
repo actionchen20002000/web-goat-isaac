@@ -87,6 +87,15 @@ dast:
   before_script:
     - curl -vvv -X POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc"
     - export DAST_WEBSITE=http://webgoat:8080/WebGoat/ # do it again as the DAST template does crappy work
+    - export DAST_AUTH_URL=http://webgoat:8080/WebGoat/login
+    - export DAST_EXCLUDE_URLS=http://webgoat:8080/WebGoat/logout,http://webgoat:8080/WebGoat/login,http://webgoat:8080/WebGoat/login?logout
+    - export DAST_FULL_SCAN_ENABLED=true
+    - export DAST_USERNAME=testtest
+    - export DAST_PASSWORD=password # use protected/masked variables, this is only for demonstration purposes
+    - export DAST_USERNAME_FIELD=username
+    - export DAST_PASSWORD_FIELD=password
+    - export DAST_AUTH_REPORT=true
+    - export DAST_AUTH_VERIFICATION_URL="http://webgoat:8080/WebGoat/start.mvc#lesson/WebGoatIntroduction.lesson"
   artifacts:
     paths: [gl-dast-debug-auth-report.html]
     when: always
