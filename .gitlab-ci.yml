@@ -15,7 +15,7 @@ include:
   - template: SAST.gitlab-ci.yml
   - template: DAST.gitlab-ci.yml
 
-build:
+.build:
   stage: build
   image: maven:3-jdk-11-slim
   script:
@@ -31,7 +31,7 @@ build:
       - "webgoat-server/Dockerfile"
       - "webgoat-server/target/webgoat-server-v8.1.0.jar"
 
-sast:
+.sast:
   stage: analyze
   artifacts:
     reports:
@@ -41,7 +41,7 @@ sast:
       - target/
       - gl-sast-report.json
 
-spotbugs-sast:
+.spotbugs-sast:
   dependencies:
     - build
   script:
