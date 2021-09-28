@@ -4,6 +4,9 @@ stages:
   - push
   - dast
 
+variables:
+  CI_DEBUG_TRACE: "true"
+
 include:
   - template: SAST.gitlab-ci.yml
   - template: DAST.gitlab-ci.yml
