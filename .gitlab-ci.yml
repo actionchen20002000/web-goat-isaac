@@ -98,7 +98,8 @@ dast:
     - export DAST_PASSWORD_FIELD=password
     - export DAST_AUTH_REPORT=true
     - export DAST_AUTH_VERIFICATION_URL="http://webgoat:8080/WebGoat/start.mvc#lesson/WebGoatIntroduction.lesson"
-   # - export DAST_ZAP_USE_AJAX_SPIDER=true
+    - export DAST_ZAP_USE_AJAX_SPIDER=true
+    - export DAST_BROWSER_SCAN=true
     #- export GIT_STRATEGY="fetch"
     #- export DAST_PATHS_FILE=dastpaths
     - export DAST_PATHS="/WebGoat/start.mvc#lesson/SqlInjection.lesson/1,/WebGoat/start.mvc#lesson/SqlInjection.lesson/2,/WebGoat/start.mvc#lesson/SqlInjection.lesson/3,/WebGoat/start.mvc#lesson/SqlInjection.lesson/4,/WebGoat/start.mvc#lesson/SqlInjection.lesson/5"
