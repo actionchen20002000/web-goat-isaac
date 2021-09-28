@@ -97,6 +97,7 @@ dast:
     - export DAST_AUTH_REPORT=true
     - export DAST_AUTH_VERIFICATION_URL="http://webgoat:8080/WebGoat/start.mvc#lesson/WebGoatIntroduction.lesson"
    # - export DAST_ZAP_USE_AJAX_SPIDER=true
+    - export GIT_STRATEGY=fetch
     - export DAST_PATHS_FILE=dastpaths
   artifacts:
     paths: [gl-dast-debug-auth-report.html]
