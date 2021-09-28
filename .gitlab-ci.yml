@@ -1,3 +1,7 @@
+image: docker:20.10.6
+services:
+  - name: 'docker:20.10.6-dind'
+
 stages:
   - build
   - analyze
@@ -53,8 +57,9 @@ spotbugs-sast:
 push:
   services:
   - name: docker:20.10.6-dind
-    alias: dind
   image: docker:20.10.6
+  variables:
+    DOCKER_DRIVER: overlay2
   stage: push
   script:
     - cd webgoat-server
@@ -84,6 +89,8 @@ dast:
   artifacts:
     paths: [gl-dast-debug-auth-report.html]
     when: always
+  variables:
+    DOCKER_DRIVER: overlay2
   services:
-  - name: $CI_REGISTRY_IMAGE#:latest
+  - name: $CI_REGISTRY_IMAGE:latest
     alias: webgoat
