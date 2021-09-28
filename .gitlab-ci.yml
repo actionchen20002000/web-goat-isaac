@@ -52,9 +52,9 @@ spotbugs-sast:
 
 push:
   services:
-  - name: docker:dind
+  - name: docker:20.10.6-dind
     alias: dind
-  image: docker:19.03.5
+  image: docker:20.10.6
   stage: push
   script:
     - cd webgoat-server
