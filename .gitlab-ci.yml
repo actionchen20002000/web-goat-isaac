@@ -84,6 +84,8 @@ dast:
     DAST_PASSWORD_FIELD: password
     DAST_AUTH_REPORT: "true"
     DAST_AUTH_VERIFICATION_URL: "http://webgoat:8080/WebGoat/start.mvc#lesson/WebGoatIntroduction.lesson"
+    GIT_STRATEGY: fetch
+
   before_script:
     - curl -vvv -X POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc"
     - export DAST_WEBSITE=http://webgoat:8080/WebGoat/ # do it again as the DAST template does crappy work
