@@ -46,12 +46,14 @@ sast:
 
 spotbugs-sast:
   stage: test
+  tags:
+    - docker
   dependencies:
     - build
   script:
     - /analyzer run -compile=false
   variables:
-    MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2/
+    MAVEN_REPO_PATH: .m2/ #${CI_PROJECT_DIR}/.m2/
   cache:
     key: $CI_COMMIT_REF_SLUG
   artifacts:
