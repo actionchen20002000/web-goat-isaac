@@ -1,7 +1,3 @@
-image: docker:20.10.6
-services:
-  - name: 'docker:20.10.6-dind'
-
 stages:
   - build
   - test
@@ -9,8 +5,8 @@ stages:
   - dast
 
 include:
-  - template: SAST.gitlab-ci.yml
-  - template: DAST.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/DAST.gitlab-ci.yml
 
 cache:
   key: $CI_COMMIT_REF_SLUG
@@ -28,10 +24,11 @@ build:
     - mvn clean install -DskipTests
     - mvn package -B -e -DskipTests -Dmaven.repo.local=./.m2/repository
   artifacts:
+    when: always
+    expire_in: 2 days
     paths:
-      - "webgoat-server/Dockerfile"
-      - "webgoat-server/target/webgoat-server-v8.1.0.jar"
-
+      - webgoat-server/Dockerfile
+      - webgoat-server/target/*.jar
 
 
 spotbugs-sast:
