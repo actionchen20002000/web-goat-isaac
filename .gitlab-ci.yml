@@ -28,10 +28,9 @@ build:
     when: always
     expire_in: 2 days
     paths:
-      - */Dockerfile
-      - */target/
-      #- webgoat-server/target/
-      - .m2/
+      - "*/Dockerfile"
+      - "*/target/"
+      - ".m2/"
 
 
 spotbugs-sast:
