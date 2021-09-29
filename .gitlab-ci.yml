@@ -4,7 +4,7 @@ services:
 
 stages:
   - build
-  - analyze
+  - test
   - push
   - dast
 
@@ -31,30 +31,7 @@ build:
       - "webgoat-server/Dockerfile"
       - "webgoat-server/target/webgoat-server-v8.1.0.jar"
 
-sast:
-  stage: analyze
-  script:
-    - echo "Curious for SAST results"
-  artifacts:
-    reports:
-      sast: gl-sast-report.json
-    paths:
-      - .m2/
-      - target/
-      - gl-sast-report.json
 
-spotbugs-sast:
-  dependencies:
-    - build
-  script:
-    - /analyzer run -compile=false
-  variables:
-    MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2/
-  artifacts:
-    reports:
-      sast: gl-sast-report.json
-    paths:
-      - gl-sast-report.json
 
 push:
   services:
