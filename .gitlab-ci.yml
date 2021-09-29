@@ -8,8 +8,8 @@ stages:
   - push
   - dast
 
-#variables:
-  #CI_DEBUG_TRACE: "true"
+variables:
+  CI_DEBUG_TRACE: "true"
 
 include:
   - template: SAST.gitlab-ci.yml
@@ -20,16 +20,17 @@ build:
   image: maven:3-jdk-11-slim
   script:
     - mvn clean install -DskipTests
-    - mvn package -DskipTests -Dmaven.repo.local=./.m2
+    - mvn package -DskipTests -Dmaven.repo.local=./.m2/
   cache:
     policy: push
     key: $CI_COMMIT_REF_SLUG
     paths:
-      - .m2
+      - .m2/
   artifacts:
     paths:
       - "webgoat-server/Dockerfile"
       - "webgoat-server/target/webgoat-server-v8.1.0.jar"
+      - "./m2/"
 
 sast:
   stage: test
@@ -52,7 +53,7 @@ spotbugs-sast:
   script:
     - /analyzer run -compile=false
   variables:
-    MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2
+    MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2/
   cache:
     key: $CI_COMMIT_REF_SLUG
   artifacts:
