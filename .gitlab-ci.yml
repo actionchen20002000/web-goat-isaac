@@ -33,7 +33,7 @@ build:
 
 sast:
   stage: analyze
-  before_script:
+  script:
     - echo "Curious for SAST results"
   artifacts:
     reports:
