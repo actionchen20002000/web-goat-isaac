@@ -20,7 +20,7 @@ build:
   image: maven:3-jdk-11-slim
   script:
     - mvn clean install -DskipTests
-    - mvn package -DskipTests -Dmaven.repo.local=./.m2/
+    - mvn package -DskipTests -Dmaven.repo.local=./.m2
   cache:
     policy: push
     key: $CI_COMMIT_REF_SLUG
@@ -50,9 +50,9 @@ spotbugs-sast:
   dependencies:
     - build
   script:
-    - /analyzer run # -compile=false
+    - /analyzer run -compile=false
   variables:
-    MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2/
+    MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2
   cache:
     key: $CI_COMMIT_REF_SLUG
   artifacts:
