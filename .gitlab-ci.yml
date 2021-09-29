@@ -8,13 +8,11 @@ include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/DAST.gitlab-ci.yml
 
-cache:
-  key: $CI_COMMIT_REF_SLUG
-  paths:
-  - “.m2/repository”
+
 
 variables:
   CI_DEBUG_TRACE: "true"
+
 
 
 build:
@@ -29,22 +27,18 @@ build:
     paths:
       - webgoat-server/Dockerfile
       - webgoat-server/target/
-      - .m2
+      - .m2/
+
 
 spotbugs-sast:
-  stage: test
-  tags:
-    - docker
   dependencies:
     - build
   variables:
-    MAVEN_REPO_PATH: ".m2/repository" 
+    MAVEN_REPO_PATH: ./.m2/repository 
     COMPILE: "false"
   artifacts:
     reports:
       sast: gl-sast-report.json
-   # paths:
-    #  - gl-sast-report.json
 
 
 push:
@@ -65,7 +59,6 @@ push:
 
 dast:
   variables:
-    GIT_STRATEGY: fetch
     DAST_WEBSITE: http://webgoat:8080/WebGoat/
     DAST_AUTH_URL: http://webgoat:8080/WebGoat/login
     DAST_EXCLUDE_URLS: http://webgoat:8080/WebGoat/logout,http://webgoat:8080/WebGoat/login,http://webgoat:8080/WebGoat/login?logout
@@ -76,8 +69,6 @@ dast:
     DAST_PASSWORD_FIELD: password
     DAST_AUTH_REPORT: "true"
     DAST_AUTH_VERIFICATION_URL: "http://webgoat:8080/WebGoat/start.mvc#lesson/WebGoatIntroduction.lesson"
-    GIT_STRATEGY: fetch
-
   before_script:
     - curl -vvv -X POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc"
     # ToDo: do all variables again as the DAST template does something weird
