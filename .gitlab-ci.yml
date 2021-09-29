@@ -8,38 +8,31 @@ stages:
   - push
   - dast
 
+include:
+  - template: SAST.gitlab-ci.yml
+  - template: DAST.gitlab-ci.yml
+
 cache:
+  key: $CI_COMMIT_REF_SLUG
   paths:
-    - ./m2/
+  - “.m2/repository”
 
 variables:
   CI_DEBUG_TRACE: "true"
 
-include:
-  - template: SAST.gitlab-ci.yml
-  - template: DAST.gitlab-ci.yml
 
 build:
   stage: build
   image: maven:3-jdk-11-slim
   script:
     - mvn clean install -DskipTests
-    - mvn package -DskipTests -Dmaven.repo.local=./.m2/
+    - mvn package -B -e -DskipTests -Dmaven.repo.local=./.m2/repository
   artifacts:
     paths:
       - "webgoat-server/Dockerfile"
       - "webgoat-server/target/webgoat-server-v8.1.0.jar"
 
-sast:
-  stage: test
-  script:
-    - echo "Curious for SAST results"
-  artifacts:
-    reports:
-      sast: gl-sast-report.json
-    paths:
-      - target/
-      - gl-sast-report.json
+
 
 spotbugs-sast:
   stage: test
@@ -51,11 +44,12 @@ spotbugs-sast:
     - /analyzer run -compile=false
   variables:
     MAVEN_REPO_PATH: .m2/ #${CI_PROJECT_DIR}/.m2/
+    COMPILE: "false"
   artifacts:
     reports:
       sast: gl-sast-report.json
-    paths:
-      - gl-sast-report.json
+   # paths:
+    #  - gl-sast-report.json
 
 
 push:
