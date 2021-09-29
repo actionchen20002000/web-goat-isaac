@@ -22,14 +22,14 @@ build:
   image: maven:3-jdk-11-slim
   script:
     - mvn clean install -DskipTests
-    - mvn package -B -e -DskipTests -Dmaven.repo.local=./.m2/repository
+    - mvn package -B -e -DskipTests -Dmaven.repo.local=".m2/repository"
   artifacts:
     when: always
     expire_in: 2 days
     paths:
       - webgoat-server/Dockerfile
-      - webgoat-server/target/*.jar
-
+      - webgoat-server/target/
+      - .m2
 
 spotbugs-sast:
   stage: test
@@ -37,10 +37,8 @@ spotbugs-sast:
     - docker
   dependencies:
     - build
-  script:
-    - /analyzer run -compile=false
   variables:
-    MAVEN_REPO_PATH: .m2/repository #${CI_PROJECT_DIR}/.m2/
+    MAVEN_REPO_PATH: ".m2/repository" 
     COMPILE: "false"
   artifacts:
     reports:
