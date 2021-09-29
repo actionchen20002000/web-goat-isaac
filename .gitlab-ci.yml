@@ -15,7 +15,7 @@ include:
   # - template: SAST.gitlab-ci.yml
   - template: DAST.gitlab-ci.yml
 
-.build:
+build:
   stage: build
   image: maven:3-jdk-11-slim
   script:
@@ -31,7 +31,7 @@ include:
       - "webgoat-server/Dockerfile"
       - "webgoat-server/target/webgoat-server-v8.1.0.jar"
 
-.sast:
+sast:
   stage: analyze
   artifacts:
     reports:
@@ -41,7 +41,7 @@ include:
       - target/
       - gl-sast-report.json
 
-.spotbugs-sast:
+spotbugs-sast:
   dependencies:
     - build
   script:
@@ -54,12 +54,12 @@ include:
     paths:
       - gl-sast-report.json
 
-.push:
+push:
   services:
   - name: docker:20.10.6-dind
   image: docker:20.10.6
   variables:
-    DOCKER_DRIVER: overlay2
+    DOCKER_DRIVER: overlay2 # not sure this is needed
   stage: push
   script:
     - cd webgoat-server
@@ -87,7 +87,8 @@ dast:
 
   before_script:
     - curl -vvv -X POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc"
-    - export DAST_WEBSITE=http://webgoat:8080/WebGoat/ # do it again as the DAST template does crappy work
+    # ToDo: do all variables again as the DAST template does something weird
+    - export DAST_WEBSITE=http://webgoat:8080/WebGoat/ 
     - export DAST_AUTH_URL=http://webgoat:8080/WebGoat/login
     - export DAST_EXCLUDE_URLS=http://webgoat:8080/WebGoat/logout,http://webgoat:8080/WebGoat/login,http://webgoat:8080/WebGoat/login?logout
     - export DAST_FULL_SCAN_ENABLED=true
@@ -100,7 +101,7 @@ dast:
     #- export DAST_ZAP_USE_AJAX_SPIDER=true
     - export DAST_BROWSER_SCAN=true
     - export DAST_BROWSER_ACTION_TIMEOUT="30s"
-    - DAST_BROWSER_NUMBER_OF_BROWSERS=1
+    - DAST_BROWSER_NUMBER_OF_BROWSERS=3
     #- export GIT_STRATEGY="fetch"
     #- export DAST_PATHS_FILE=dastpaths
     #- export DAST_PATHS="/WebGoat/start.mvc#lesson/SqlInjection.lesson/1,/WebGoat/start.mvc#lesson/SqlInjection.lesson/2,/WebGoat/start.mvc#lesson/SqlInjection.lesson/3,/WebGoat/start.mvc#lesson/SqlInjection.lesson/4,/WebGoat/start.mvc#lesson/SqlInjection.lesson/5"
