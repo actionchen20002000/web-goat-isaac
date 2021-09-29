@@ -35,6 +35,8 @@ sast:
   stage: test
   script:
     - echo "Curious for SAST results"
+  cache:
+    key: ${CI_COMMIT_SHORT_SHA}
   artifacts:
     reports:
       sast: gl-sast-report.json
@@ -51,6 +53,8 @@ spotbugs-sast:
     - /analyzer run -compile=false
   variables:
     MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2/
+  cache:
+    key: ${CI_COMMIT_SHORT_SHA}
   artifacts:
     reports:
       sast: gl-sast-report.json
