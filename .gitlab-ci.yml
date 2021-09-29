@@ -26,16 +26,10 @@ build:
   script:
     - mvn clean install -DskipTests
     - mvn package -DskipTests -Dmaven.repo.local=./.m2/
-  cache:
-    policy: push
-    key: $CI_COMMIT_REF_SLUG
-    paths:
-      - .m2/
   artifacts:
     paths:
       - "webgoat-server/Dockerfile"
       - "webgoat-server/target/webgoat-server-v8.1.0.jar"
-      - "./m2/"
 
 sast:
   stage: test
@@ -47,7 +41,6 @@ sast:
     reports:
       sast: gl-sast-report.json
     paths:
-      - .m2/
       - target/
       - gl-sast-report.json
 
