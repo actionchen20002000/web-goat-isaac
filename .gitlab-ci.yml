@@ -12,7 +12,7 @@ stages:
   #CI_DEBUG_TRACE: "true"
 
 include:
-  # - template: SAST.gitlab-ci.yml
+  - template: SAST.gitlab-ci.yml
   - template: DAST.gitlab-ci.yml
 
 build:
