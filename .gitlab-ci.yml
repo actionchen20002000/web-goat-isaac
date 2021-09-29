@@ -23,7 +23,7 @@ build:
     - mvn package -DskipTests -Dmaven.repo.local=./.m2/
   cache:
     policy: push
-    key: ${CI_COMMIT_SHORT_SHA}
+    key: $CI_COMMIT_REF_SLUG
     paths:
       - .m2
   artifacts:
@@ -36,7 +36,7 @@ sast:
   script:
     - echo "Curious for SAST results"
   cache:
-    key: ${CI_COMMIT_SHORT_SHA}
+    key: $CI_COMMIT_REF_SLUG
   artifacts:
     reports:
       sast: gl-sast-report.json
@@ -54,7 +54,7 @@ spotbugs-sast:
   variables:
     MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2/
   cache:
-    key: ${CI_COMMIT_SHORT_SHA}
+    key: $CI_COMMIT_REF_SLUG
   artifacts:
     reports:
       sast: gl-sast-report.json
