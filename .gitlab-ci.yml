@@ -43,7 +43,7 @@ spotbugs-sast:
   script:
     - /analyzer run -compile=false
   variables:
-    MAVEN_REPO_PATH: .m2/ #${CI_PROJECT_DIR}/.m2/
+    MAVEN_REPO_PATH: .m2/repository #${CI_PROJECT_DIR}/.m2/
     COMPILE: "false"
   artifacts:
     reports:
