@@ -44,6 +44,7 @@ sast:
       - gl-sast-report.json
 
 spotbugs-sast:
+  stage: test
   dependencies:
     - build
   script:
