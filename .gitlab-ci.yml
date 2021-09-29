@@ -8,6 +8,11 @@ stages:
   - push
   - dast
 
+cache:
+  key: $CI_COMMIT_REF_SLUG
+  paths:
+    - ./m2/
+
 variables:
   CI_DEBUG_TRACE: "true"
 
