@@ -33,6 +33,8 @@ build:
 
 sast:
   stage: analyze
+  before_script:
+    - echo "Curious for SAST results"
   artifacts:
     reports:
       sast: gl-sast-report.json
