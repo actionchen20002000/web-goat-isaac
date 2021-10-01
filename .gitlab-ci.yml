@@ -34,6 +34,8 @@ build:
   script:
     - mvn clean install # -DskipTests to shorten tge build
     - mvn package -B -e -DskipTests -Dmaven.repo.local=".m2/repository" # -DskipTests
+    - cd webwolf && mvn clean install
+    - mvn package -B -e -DskipTests -Dmaven.repo.local=".m2/repository"
   artifacts:
     when: always
     expire_in: 2 days
@@ -41,6 +43,7 @@ build:
       - "webgoat-server/Dockerfile"
       - "webgoat-server/target/"
       - ".m2/"
+      - "webwolf/.m2"
 
 # editor complains ?
 spotbugs-sast:
