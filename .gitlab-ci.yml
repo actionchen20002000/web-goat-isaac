@@ -7,6 +7,7 @@
 # AJAX spider only reveals a subset of findings
 # In this project the WebGoat container has been used as a service so we can avoid deployment
 # It is probably not the most efficient way but pretty good for this demo project.
+# There seems to be a silly bug that the variables part is not respected: ToDo
 
 stages:
   - build
@@ -27,8 +28,6 @@ variables:
 #  CI_DEBUG_TRACE: "true"
   SECURE_LOG_LEVEL: "debug" # pretty helpful when you get errors like exit 1
 
-
-
 build:
   stage: build
   image: maven:3-jdk-11-slim
@@ -42,7 +41,6 @@ build:
       - "webgoat-server/Dockerfile"
       - "webgoat-server/target/"
       - ".m2/"
-  
 
 spotbugs-sast:
   dependencies:
@@ -50,6 +48,9 @@ spotbugs-sast:
   variables:
     MAVEN_REPO_PATH: ./.m2/repository 
     COMPILE: "false"
+  before_script:
+    # repeating variables here: see ToDo above
+    - export MAVEN_REPO_PATH=./.m2/repository
   script: echo "In case of error you might want to set SECURE_LOG_LEVEL to a value of debug "
   artifacts:
     reports:
@@ -87,11 +88,28 @@ dast:
     DAST_ZAP_USE_AJAX_SPIDER: "true"
     DOCKER_DRIVER: overlay2
   before_script:
+    # we need to add a user first in order to login
     - curl -vvv -X POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc"   
+    # repeating variables here: see ToDo above
+    - export DAST_WEBSITE=http://webgoat:8080/WebGoat/ 
+    - export DAST_AUTH_URL=http://webgoat:8080/WebGoat/login
+    - export DAST_EXCLUDE_URLS=http://webgoat:8080/WebGoat/logout,http://webgoat:8080/WebGoat/login,http://webgoat:8080/WebGoat/login?logout
+    - export DAST_FULL_SCAN_ENABLED=true
+    - export DAST_USERNAME=testtest
+    - export DAST_PASSWORD=password # use protected/masked variables, this is only for demonstration purposes
+    - export DAST_USERNAME_FIELD=username
+    - export DAST_PASSWORD_FIELD=password
+    - export DAST_AUTH_REPORT=true
+    - export DAST_AUTH_VERIFICATION_URL="http://webgoat:8080/WebGoat/start.mvc#lesson/WebGoatIntroduction.lesson"
+    - export DAST_ZAP_USE_AJAX_SPIDER=true
+    #- export DAST_BROWSER_SCAN=true
+    #- export DAST_BROWSER_ACTION_TIMEOUT="30s"
+    #- DAST_BROWSER_NUMBER_OF_BROWSERS=3
   script: echo "In case of error you might want to set SECURE_LOG_LEVEL to a value of debug "
   artifacts:
     paths: [gl-dast-debug-auth-report.html]
     when: always
   services:
+  # WebGoat is only applied as a service here to avoid deployment for demo purposes  
   - name: $CI_REGISTRY_IMAGE:latest
     alias: webgoat
