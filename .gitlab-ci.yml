@@ -46,13 +46,13 @@ build:
       - "webwolf/.m2"
 
 # editor complains ?
-spotbugs-sast:  
+spotbugs-sast:  # spotbugs fails to respect hierrachical poms: ToDo
   dependencies:
     - build
   variables:
     MAVEN_REPO_PATH: ./.m2/repository 
     #SAST_EXCLUDED_PATHS: ./docker,./webgoat-integration-tests,./webwolf,./webgoat-container,./webgoat-lessons
-    #COMPILE: "false"
+    COMPILE: "false"
   before_script:
     # repeating variables here: see ToDo above
     - export MAVEN_REPO_PATH=./.m2/repository
@@ -72,6 +72,16 @@ semgrep:
       p/security-audit
       p/secrets
       p/owasp-top-ten
+      # Upload findings to GitLab SAST Dashboard [step 1/2]
+  # See also the next step.
+    SEMGREP_GITLAB_JSON: "1"
+  # Change job timeout (default is 1800 seconds; set to 0 to disable)
+    SEMGREP_TIMEOUT: 0
+  # Upload findings to GitLab SAST Dashboard (remove `script:` line above) [step 2/2]
+  # script: semgrep-agent --gitlab-json > gl-sast-report.json || true
+  artifacts:
+    reports:
+      sast: gl-sast-report.json
 
 push:
   services:
