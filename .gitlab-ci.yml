@@ -50,7 +50,7 @@ spotbugs-sast:
   dependencies:
     - build
   variables:
-    MAVEN_REPO_PATH: ./.m2/repository 
+    # MAVEN_REPO_PATH: ./.m2/repository 
     #SAST_EXCLUDED_PATHS: ./docker,./webgoat-integration-tests,./webwolf,./webgoat-container,./webgoat-lessons
     COMPILE: "false"
   before_script:
