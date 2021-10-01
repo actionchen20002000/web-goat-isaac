@@ -32,10 +32,10 @@ build:
   stage: build
   image: maven:3-jdk-11-slim
   script:
-    - mvn clean install # -DskipTests to shorten tge build
-    - mvn package -B -e -DskipTests -Dmaven.repo.local=".m2/repository" # -DskipTests
-    - cd webwolf && mvn clean install
-    - mvn package -B -e -DskipTests -Dmaven.repo.local=".m2/repository"
+    - mvn clean install -DskipTests # -DskipTests to shorten the build
+    - mvn package -B -e  -DskipTests -Dmaven.repo.local=".m2/repository" # -DskipTests
+    # - cd webwolf && mvn clean install # -DskipTests to shorten the build
+    # - mvn package -B -e  -Dmaven.repo.local=".m2/repository" # -DskipTests
   artifacts:
     when: always
     expire_in: 2 days
@@ -47,6 +47,12 @@ build:
 
 # editor complains ?
 spotbugs-sast:
+  variables:
+    FAIL_NEVER: 1
+  before_script:
+    - export FAIL_NEVER=1
+
+
   dependencies:
     - build
   variables:
@@ -79,6 +85,7 @@ push:
 
 # editor complains ?
 dast:
+  needs: [push]
   variables:
     DAST_WEBSITE: http://webgoat:8080/WebGoat/
     DAST_AUTH_URL: http://webgoat:8080/WebGoat/login
