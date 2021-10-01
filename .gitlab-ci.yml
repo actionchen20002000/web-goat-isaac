@@ -14,7 +14,8 @@ cache:
   - .m2/repository
 
 variables:
-  CI_DEBUG_TRACE: "true"
+#  CI_DEBUG_TRACE: "true"
+  SECURE_LOG_LEVEL: "debug"
 
 
 
@@ -39,6 +40,7 @@ spotbugs-sast:
   variables:
     MAVEN_REPO_PATH: ./.m2/repository 
     COMPILE: "false"
+  script: echo "In case of error you might want to set SECURE_LOG_LEVEL to a value of debug "
   artifacts:
     reports:
       sast: gl-sast-report.json
@@ -72,26 +74,10 @@ dast:
     DAST_PASSWORD_FIELD: password
     DAST_AUTH_REPORT: "true"
     DAST_AUTH_VERIFICATION_URL: "http://webgoat:8080/WebGoat/start.mvc#lesson/WebGoatIntroduction.lesson"
+    DAST_ZAP_USE_AJAX_SPIDER: "true"
   before_script:
-    - curl -vvv -X POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc"
-    # ToDo: do all variables again as the DAST template does something weird
-    - export DAST_WEBSITE=http://webgoat:8080/WebGoat/ 
-    - export DAST_AUTH_URL=http://webgoat:8080/WebGoat/login
-    - export DAST_EXCLUDE_URLS=http://webgoat:8080/WebGoat/logout,http://webgoat:8080/WebGoat/login,http://webgoat:8080/WebGoat/login?logout
-    - export DAST_FULL_SCAN_ENABLED=true
-    - export DAST_USERNAME=testtest
-    - export DAST_PASSWORD=password # use protected/masked variables, this is only for demonstration purposes
-    - export DAST_USERNAME_FIELD=username
-    - export DAST_PASSWORD_FIELD=password
-    - export DAST_AUTH_REPORT=true
-    - export DAST_AUTH_VERIFICATION_URL="http://webgoat:8080/WebGoat/start.mvc#lesson/WebGoatIntroduction.lesson"
-    - export DAST_ZAP_USE_AJAX_SPIDER=true
-    #- export DAST_BROWSER_SCAN=true
-    #- export DAST_BROWSER_ACTION_TIMEOUT="30s"
-    #- DAST_BROWSER_NUMBER_OF_BROWSERS=3
-    - export GIT_STRATEGY="fetch"
-    #- export DAST_PATHS_FILE=dastpaths
-    #- export DAST_PATHS="/WebGoat/start.mvc#lesson/SqlInjection.lesson/1,/WebGoat/start.mvc#lesson/SqlInjection.lesson/2,/WebGoat/start.mvc#lesson/SqlInjection.lesson/3,/WebGoat/start.mvc#lesson/SqlInjection.lesson/4,/WebGoat/start.mvc#lesson/SqlInjection.lesson/5"
+    - curl -vvv -X POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc"   
+  script: echo "In case of error you might want to set SECURE_LOG_LEVEL to a value of debug "
   artifacts:
     paths: [gl-dast-debug-auth-report.html]
     when: always
