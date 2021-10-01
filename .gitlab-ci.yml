@@ -67,11 +67,12 @@ semgrep: # https://semgrep.dev/docs/semgrep-ci/sample-ci-configs/
   image: returntocorp/semgrep-agent:v1
   cache: {}
   needs: []
-  script: semgrep-agent --gitlab-json > gl-sast-report.json || true # semgrep --include='*.java' --include='*.js' --config=p/owasp-top-ten # semgrep-agent
+  script: semgrep --skip-unknown-extensions --disable-nosem --json --autofix --dryrun --enable-metrics --config https://semgrep.dev/c/p/owasp-top-ten  --debug  -l java -l javascript  > gl-sast-report.json
+    # semgrep-agent --gitlab-json > gl-sast-report.json || true # semgrep --include='*.java' --include='*.js' --config=p/owasp-top-ten # semgrep-agent
   variables:
     SEMGREP_RULES: >- # more at semgrep.dev/ p/security-audit p/secrets
       p/owasp-top-ten
-      # Upload findings to GitLab SAST Dashboard [step 1/2]
+   # Upload findings to GitLab SAST Dashboard [step 1/2]
   # See also the next step.
     SEMGREP_GITLAB_JSON: "1"
   # Change job timeout (default is 1800 seconds; set to 0 to disable)
