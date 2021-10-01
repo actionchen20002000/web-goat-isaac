@@ -26,7 +26,7 @@ cache:
 
 variables:
   # CI_DEBUG_TRACE: "true"
-  SECURE_LOG_LEVEL: "debug" # pretty helpful when you get errors like exit 1
+  # SECURE_LOG_LEVEL: "debug" # pretty helpful when you get errors like exit 1
 
 build:
   stage: build
@@ -66,7 +66,7 @@ spotbugs-sast:  # spotbugs fails to respect hierrachical poms: ToDo
 semgrep: # https://semgrep.dev/docs/semgrep-ci/sample-ci-configs/
   image: returntocorp/semgrep-agent:v1
   needs: []
-  script: semgrep-agent
+  script: semgrep-agent --include *.js --include *.java
   variables:
     SEMGREP_RULES: >- # more at semgrep.dev/ p/security-audit p/secrets
       p/owasp-top-ten
@@ -75,7 +75,7 @@ semgrep: # https://semgrep.dev/docs/semgrep-ci/sample-ci-configs/
     SEMGREP_GITLAB_JSON: "1"
   # Change job timeout (default is 1800 seconds; set to 0 to disable)
     SEMGREP_TIMEOUT: 0
-    SAST_EXCLUDED_PATHS: "*.pom,docker,docs,*.yml,*.yaml,*.jpg,*.png,scripts,*.adoc,*.xml,*.json,*.properties, README,*.txt"
+    SAST_EXCLUDED_PATHS: "*.pom,docker,docs,*.yml,*.yaml,*.jpg,*.png,scripts,*.adoc,*.xml,*.json,*.properties, README,*.txt,*map,*.sql,*.sh,*.html,*.svg"
   # Upload findings to GitLab SAST Dashboard (remove `script:` line above) [step 2/2]
   # script: semgrep-agent --gitlab-json > gl-sast-report.json || true
   artifacts:
