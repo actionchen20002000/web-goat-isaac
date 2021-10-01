@@ -64,12 +64,13 @@ spotbugs-sast:  # spotbugs fails to respect hierrachical poms: ToDo
       sast: gl-sast-report.json
 
 semgrep: # https://semgrep.dev/docs/semgrep-ci/sample-ci-configs/
+  stage: test
   image: returntocorp/semgrep-agent:v1
   cache: {}
   needs: []
   script: 
-    - semgrep --skip-unknown-extensions --disable-nosem --json --autofix --dryrun --enable-metrics --config https://semgrep.dev/c/p/owasp-top-ten   --gitlab-json -l java -l javascript  > gl-sast-report.json # --debug
-    # semgrep-agent --gitlab-json > gl-sast-report.json || true # semgrep --include='*.java' --include='*.js' --config=p/owasp-top-ten # semgrep-agent
+   # - semgrep --skip-unknown-extensions --disable-nosem --json --autofix --dryrun --enable-metrics --config https://semgrep.dev/c/p/owasp-top-ten   --gitlab-json -l java -l javascript  > gl-sast-report.json # --debug
+   semgrep-agent --gitlab-json > gl-sast-report.json || true # semgrep --include='*.java' --include='*.js' --config=p/owasp-top-ten # semgrep-agent
   variables:
     SEMGREP_RULES: >- # more at semgrep.dev/ p/security-audit p/secrets
       p/owasp-top-ten
@@ -78,7 +79,7 @@ semgrep: # https://semgrep.dev/docs/semgrep-ci/sample-ci-configs/
     SEMGREP_GITLAB_JSON: "1"
   # Change job timeout (default is 1800 seconds; set to 0 to disable)
     SEMGREP_TIMEOUT: 0
-    SAST_EXCLUDED_PATHS: "*.pom, docker, docs, *.yml, *.yaml, *.jpg, *.png, scripts, *.adoc, *.xml, *.json, *.properties, README, *.txt, *map, *.sql, *.sh, *.html, *.svg"
+    SAST_EXCLUDED_PATHS: "*.pom, docker, docs, *.yml, *.yaml, *.jpg, *.png, scripts, *.adoc, *.xml, *.json, *.properties, README, *.txt, *map, *.sql, *.sh, *.html, *.svg, *.fonts"
   # Upload findings to GitLab SAST Dashboard (remove `script:` line above) [step 2/2]
   # script: semgrep-agent --gitlab-json > gl-sast-report.json || true
   artifacts:
