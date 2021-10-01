@@ -56,8 +56,8 @@ spotbugs-sast:
   before_script:
     # repeating variables here: see ToDo above
     - export MAVEN_REPO_PATH=./.m2/repository
-    - export SAST_EXCLUDED_PATHS="./docker,./webgoat-integration-tests,./webwolf,./webgoat-container,./webgoat-lessons"
-   # - rm ./webgoat-lessons/pom.xml ./webgoat-lessons/*/pom.xml ./docker/pom.xml webgoat-integration-tests/pom.xml
+   # - export SAST_EXCLUDED_PATHS="./docker,./webgoat-integration-tests,./webwolf,./webgoat-container,./webgoat-lessons"
+    - rm ./webgoat-lessons/pom.xml ./webgoat-lessons/*/pom.xml ./docker/pom.xml webgoat-integration-tests/pom.xml
     - echo "In case of error you might want to set SECURE_LOG_LEVEL to a value of debug "
   artifacts:
     reports:
