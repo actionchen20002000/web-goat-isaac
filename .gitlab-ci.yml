@@ -66,7 +66,7 @@ spotbugs-sast:  # spotbugs fails to respect hierrachical poms: ToDo
 semgrep: # https://semgrep.dev/docs/semgrep-ci/sample-ci-configs/
   image: returntocorp/semgrep-agent:v1
   needs: []
-  script: semgrep-agent -l javascript -l java
+  script: semgrep -l javascript -l java
   variables:
     SEMGREP_RULES: >- # more at semgrep.dev/ p/security-audit p/secrets
       p/owasp-top-ten
