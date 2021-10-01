@@ -84,8 +84,11 @@ dast:
     DAST_PASSWORD_FIELD: password
     DAST_AUTH_REPORT: "true"
     DAST_AUTH_VERIFICATION_URL: "http://webgoat:8080/WebGoat/start.mvc#lesson/WebGoatIntroduction.lesson"
-    DAST_ZAP_USE_AJAX_SPIDER: "true"
+    # DAST_ZAP_USE_AJAX_SPIDER: "true"
     DOCKER_DRIVER: overlay2
+    DAST_BROWSER_SCAN: "true"
+    DAST_BROWSER_ACTION_TIMEOUT: "30s"
+    DAST_BROWSER_NUMBER_OF_BROWSERS: 3
   before_script:
     - curl -vvv -X POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc"   
   script: echo "In case of error you might want to set SECURE_LOG_LEVEL to a value of debug "
