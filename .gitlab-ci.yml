@@ -50,9 +50,9 @@ spotbugs-sast:
   dependencies:
     - build
   variables:
-    # MAVEN_REPO_PATH: ./.m2/repository 
+    MAVEN_REPO_PATH: ./.m2/repository 
     #SAST_EXCLUDED_PATHS: ./docker,./webgoat-integration-tests,./webwolf,./webgoat-container,./webgoat-lessons
-    COMPILE: "false"
+    #COMPILE: "false"
   before_script:
     # repeating variables here: see ToDo above
     - export MAVEN_REPO_PATH=./.m2/repository
@@ -62,6 +62,18 @@ spotbugs-sast:
   artifacts:
     reports:
       sast: gl-sast-report.json
+
+semgrep:
+  image: returntocorp/semgrep-agent:v1
+  needs: []
+  script: semgrep-agent
+  variables:
+    SEMGREP_RULES: >- # more at semgrep.dev/r
+      p/security-audit
+      p/secrets
+      p/owasp-top-ten
+  rules:
+  - if: $CI_MERGE_REQUEST_IID
 
 push:
   services:
