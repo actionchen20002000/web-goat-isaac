@@ -72,8 +72,6 @@ semgrep:
       p/security-audit
       p/secrets
       p/owasp-top-ten
-  rules:
-  - if: $CI_MERGE_REQUEST_IID
 
 push:
   services:
