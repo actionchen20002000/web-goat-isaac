@@ -1,3 +1,13 @@
+# This definition builds the container for WebGoat and uses SAST and SAST
+# SAST might pass with a failure because of a missing Webwolf part but it can be ignored
+# which would make a great use case why allowing failures can make sense
+# Two DAST approaches can be applied: AJAX spider or Browser based crawling
+# The latter is more efficient when it operates on WebGoat due to the way the WebGoat navigation is set up
+# The latter approach requires around 2h which is not unusual for some applications
+# AJAX spider only reveals a subset of findings
+# In this project the WebGoat container has been used as a service so we can avoid deployment
+# It is probably not the most efficient way but pretty good for this demo project.
+
 stages:
   - build
   - test
@@ -15,7 +25,7 @@ cache:
 
 variables:
 #  CI_DEBUG_TRACE: "true"
-  SECURE_LOG_LEVEL: "debug"
+  SECURE_LOG_LEVEL: "debug" # pretty helpful when you get errors like exit 1
 
 
 
@@ -23,8 +33,8 @@ build:
   stage: build
   image: maven:3-jdk-11-slim
   script:
-    - mvn clean install # -DskipTests
-    - mvn package -B -e -DskipTests -Dmaven.repo.local=".m2/repository"
+    - mvn clean install # -DskipTests to shorten tge build
+    - mvn package -B -e -DskipTests -Dmaven.repo.local=".m2/repository" # -DskipTests
   artifacts:
     when: always
     expire_in: 2 days
@@ -75,14 +85,13 @@ dast:
     DAST_AUTH_REPORT: "true"
     DAST_AUTH_VERIFICATION_URL: "http://webgoat:8080/WebGoat/start.mvc#lesson/WebGoatIntroduction.lesson"
     DAST_ZAP_USE_AJAX_SPIDER: "true"
+    DOCKER_DRIVER: overlay2
   before_script:
     - curl -vvv -X POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc"   
   script: echo "In case of error you might want to set SECURE_LOG_LEVEL to a value of debug "
   artifacts:
     paths: [gl-dast-debug-auth-report.html]
     when: always
-  variables:
-    DOCKER_DRIVER: overlay2
   services:
   - name: $CI_REGISTRY_IMAGE:latest
     alias: webgoat
