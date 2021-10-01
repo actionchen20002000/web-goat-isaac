@@ -46,26 +46,21 @@ build:
       - "webwolf/.m2"
 
 # editor complains ?
-spotbugs-sast:
-  variables:
-    FAIL_NEVER: 1
-  before_script:
-    - export FAIL_NEVER=1
-
-
+spotbugs-sast:  
   dependencies:
     - build
   variables:
     MAVEN_REPO_PATH: ./.m2/repository 
+    SAST_EXCLUDED_PATHS: ./docker,./webgoat-integration-tests,./webwolf,./webgoat-container,./webgoat-lessons
     COMPILE: "false"
   before_script:
     # repeating variables here: see ToDo above
     - export MAVEN_REPO_PATH=./.m2/repository
+    - export SAST_EXCLUDED_PATHS="./docker,./webgoat-integration-tests,./webwolf,./webgoat-container,./webgoat-lessons"
     - echo "In case of error you might want to set SECURE_LOG_LEVEL to a value of debug "
   artifacts:
     reports:
       sast: gl-sast-report.json
-
 
 push:
   services:
