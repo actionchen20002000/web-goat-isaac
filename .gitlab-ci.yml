@@ -65,6 +65,7 @@ push:
   variables:
     DOCKER_DRIVER: overlay2 # not sure this is needed
   stage: push
+  needs: [build]
   script:
     - cd webgoat-server
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
