@@ -25,8 +25,8 @@ cache:
   - .m2/repository
 
 variables:
-  # CI_DEBUG_TRACE: "true"
-  SECURE_LOG_LEVEL: "debug" # pretty helpful when you get errors like exit 1
+  CI_DEBUG_TRACE: "true"
+  # SECURE_LOG_LEVEL: "debug" # pretty helpful when you get errors like exit 1
 
 build:
   stage: build
@@ -67,7 +67,8 @@ semgrep: # https://semgrep.dev/docs/semgrep-ci/sample-ci-configs/
   image: returntocorp/semgrep-agent:v1
   cache: {}
   needs: []
-  script: semgrep --skip-unknown-extensions --disable-nosem --json --autofix --dryrun --enable-metrics --config https://semgrep.dev/c/p/owasp-top-ten  --debug  -l java -l javascript  > gl-sast-report.json
+  script: 
+    - semgrep --skip-unknown-extensions --disable-nosem --json --autofix --dryrun --enable-metrics --config https://semgrep.dev/c/p/owasp-top-ten   --gitlab-json -l java -l javascript  > gl-sast-report.json # --debug
     # semgrep-agent --gitlab-json > gl-sast-report.json || true # semgrep --include='*.java' --include='*.js' --config=p/owasp-top-ten # semgrep-agent
   variables:
     SEMGREP_RULES: >- # more at semgrep.dev/ p/security-audit p/secrets
