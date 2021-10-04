@@ -44,7 +44,7 @@ build:
       - "webgoat-server/target/"
       - ".m2/"
       - "webwolf/.m2"
-  reports:
+    reports:
       junit:
       - target/surefire-reports/TEST-*.xml
 
