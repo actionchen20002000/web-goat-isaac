@@ -44,6 +44,9 @@ build:
       - "webgoat-server/target/"
       - ".m2/"
       - "webwolf/.m2"
+  reports:
+      junit:
+      - target/surefire-reports/TEST-*.xml
 
 # editor complains ?
 spotbugs-sast:  # spotbugs fails to respect hierrachical poms: ToDo
