@@ -44,6 +44,7 @@ build:
       - ".m2/"
   
 
+# there is some trouble with spotbugs-sast about the hierarchical poms, so you might see this fail
 spotbugs-sast:
   dependencies:
     - build
