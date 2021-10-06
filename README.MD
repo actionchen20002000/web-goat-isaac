@@ -1,4 +1,19 @@
-# WebGoat 8: A deliberately insecure Web Application
+# The project
+This project is about WebGoat and applying various security tools to it, i.e. SAST and DAST scanner
+The focus is on using DAST in different branches but the SAST scanners are running as well
+
+# What are the different branches about ?
+main - basically this README only and the original code, no GitLab pipeline file
+FewResults - DAST scanner in the standard configuration with limited results
+PlentyResults - DAST scanner with the browser-based crawling resulting in plenty of results. Run can last like 120 mins and requires to increase the runner timeout from the standr 1h to 3h
+
+If you want to see test results in the Tests widget then remove -dskipResults in the build job of each branch. Creating the test results takes quite a bit of time.
+
+
+
+
+
+# Original Readme - WebGoat 8: A deliberately insecure Web Application
 
 [![Build Status](https://travis-ci.org/WebGoat/WebGoat.svg?branch=develop)](https://travis-ci.org/WebGoat/WebGoat)
 [![Coverage Status](https://coveralls.io/repos/WebGoat/WebGoat/badge.svg?branch=develop&service=github)](https://coveralls.io/github/WebGoat/WebGoat?branch=master)
