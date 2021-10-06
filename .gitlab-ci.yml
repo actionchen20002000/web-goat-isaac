@@ -11,81 +11,94 @@
 
 stages:
   - build
-  - test
+  - analyze
   - push
   - dast
+
+services:
+  - name: docker:dind
+    alias: dind
 
 include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/DAST.gitlab-ci.yml
-
+  
 cache:
-  key: $CI_COMMIT_REF_SLUG
+  policy: pull
+  key: ${CI_COMMIT_SHA}
   paths:
-  - .m2/repository
+  - .m2/
 
 variables:
-  CI_DEBUG_TRACE: "true"
+  # CI_DEBUG_TRACE: "true"
   # SECURE_LOG_LEVEL: "debug" # pretty helpful when you get errors like exit 1
 
 build:
   stage: build
   image: maven:3-jdk-11-slim
   script:
-    - mvn clean install  # -DskipTests to shorten the build
-    - mvn package -B -e   -Dmaven.repo.local=".m2/repository" # -DskipTests
-    # - cd webwolf && mvn clean install # -DskipTests to shorten the build
-    # - mvn package -B -e  -Dmaven.repo.local=".m2/repository" # -DskipTests
+    - mvn clean install -DskipTests # -DskipTests to shorten the build
+    - mvn package -DskipTests -Dmaven.repo.local=./.m2 # -DskipTests
+  cache:
+    policy: push
+    key: ${CI_COMMIT_SHA}
+    paths:
+      - .m2
   artifacts:
-    when: always
-    expire_in: 2 days
     paths:
       - "webgoat-server/Dockerfile"
-      - "webgoat-server/target/"
-      - ".m2/"
-      - "webwolf/.m2"
-    reports:
-      junit:
-      - ./webgoat-integration-tests/target/surefire-reports/TEST-*.xml
-      - ./webwolf/target/surefire-reports/TEST-*.xml
-      - ./webgoat-container/target/surefire-reports/TEST-*.xml
-      - ./webgoat-lessons/jwt/target/surefire-reports/TEST-*.xml
-      - ./webgoat-lessons/bypass-restrictions/target/surefire-reports/TEST-*.xml
-      - ./webgoat-lessons/crypto/target/surefire-reports/TEST-*.xml
-      - ./webgoat-lessons/missing-function-ac/target/surefire-reports/TEST-*.xml
-      - ./webgoat-lessons/cross-site-scripting/target/surefire-reports/TEST-*.xml
-      - ./webgoat-lessons/xxe/target/surefire-reports/TEST-*.xml
-      - ./webgoat-lessons/insecure-deserialization/target/surefire-reports/TEST-*.xml
-      - ./webgoat-lessons/path-traversal/target/surefire-reports/TEST-*.xml
-      - ./webgoat-lessons/csrf/target/surefire-reports/TEST-*.xml      
-      - ./webgoat-lessons/chrome-dev-tools/target/surefire-reports/TEST-*.xml
-      - ./webgoat-lessons/vulnerable-components/target/surefire-reports/TEST-*.xml
-      - ./webgoat-lessons/challenge/target/surefire-reports/TEST-*.xml
-      - ./webgoat-lessons/http-proxies/target/surefire-reports/TEST-*.xml
-      - ./webgoat-lessons/cia/target/surefire-reports/TEST-*.xml
-      - ./webgoat-lessons/sql-injection/target/surefire-reports/TEST-*.xml
-      - ./webgoat-lessons/client-side-filtering/target/surefire-reports/TEST-*.xml
+      - "webgoat-server/target/webgoat-server-v8.1.0.jar"
 
-# editor complains ?
-spotbugs-sast:  # spotbugs fails to respect hierrachical poms: ToDo
-  dependencies:
-    - build
-  variables:
-    MAVEN_REPO_PATH: ./.m2/repository 
-    #SAST_EXCLUDED_PATHS: ./docker,./webgoat-integration-tests,./webwolf,./webgoat-container,./webgoat-lessons
-    COMPILE: "false"
-  before_script:
-    # repeating variables here: see ToDo above
-    - export MAVEN_REPO_PATH=./.m2/repository
-   # - export SAST_EXCLUDED_PATHS="./docker,./webgoat-integration-tests,./webwolf,./webgoat-container,./webgoat-lessons"
-   # - rm ./webgoat-lessons/pom.xml ./webgoat-lessons/*/pom.xml ./docker/pom.xml ./webgoat-integration-tests/pom.xml ./webgoat-server/pom.xml ./webgoat-container/pom.xml webwolf
-    - echo "In case of error you might want to set SECURE_LOG_LEVEL to a value of debug "
+#    reports:
+#      junit:
+#      - ./webgoat-integration-tests/target/surefire-reports/TEST-*.xml
+#      - ./webwolf/target/surefire-reports/TEST-*.xml
+#      - ./webgoat-container/target/surefire-reports/TEST-*.xml
+#      - ./webgoat-lessons/jwt/target/surefire-reports/TEST-*.xml
+#      - ./webgoat-lessons/bypass-restrictions/target/surefire-reports/TEST-*.xml
+#      - ./webgoat-lessons/crypto/target/surefire-reports/TEST-*.xml
+#      - ./webgoat-lessons/missing-function-ac/target/surefire-reports/TEST-*.xml
+#      - ./webgoat-lessons/cross-site-scripting/target/surefire-reports/TEST-*.xml
+#     - ./webgoat-lessons/xxe/target/surefire-reports/TEST-*.xml
+#      - ./webgoat-lessons/insecure-deserialization/target/surefire-reports/TEST-*.xml
+#     - ./webgoat-lessons/path-traversal/target/surefire-reports/TEST-*.xml
+#     - ./webgoat-lessons/csrf/target/surefire-reports/TEST-*.xml      
+#      - ./webgoat-lessons/chrome-dev-tools/target/surefire-reports/TEST-*.xml
+#      - ./webgoat-lessons/vulnerable-components/target/surefire-reports/TEST-*.xml
+#      - ./webgoat-lessons/challenge/target/surefire-reports/TEST-*.xml
+#      - ./webgoat-lessons/http-proxies/target/surefire-reports/TEST-*.xml
+#      - ./webgoat-lessons/cia/target/surefire-reports/TEST-*.xml
+#      - ./webgoat-lessons/sql-injection/target/surefire-reports/TEST-*.xml
+#      - ./webgoat-lessons/client-side-filtering/target/surefire-reports/TEST-*.xml
+
+# editor complaint is okay
+sast:
+  stage: analyze
   artifacts:
     reports:
       sast: gl-sast-report.json
+    paths:
+      - .m2/
+      - target/
+      - gl-sast-report.json
+
+spotbugs-sast:
+  dependencies:
+    - build
+  script:
+    - /analyzer run -compile=false
+  variables:
+    CI_DEBUG_TRACE: "true"
+    MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2/
+  artifacts:
+    reports:
+      sast: gl-sast-report.json
+    paths:
+      - gl-sast-report.json
+
 
 semgrep: # https://semgrep.dev/docs/semgrep-ci/sample-ci-configs/
-  stage: test
+  stage: analyze
   image: returntocorp/semgrep-agent:v1
   cache: {}
   needs: []
