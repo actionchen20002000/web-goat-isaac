@@ -22,6 +22,8 @@ services:
 include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/DAST.gitlab-ci.yml
+  - template: Code-Quality.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
   
 cache:
   policy: pull
@@ -32,6 +34,8 @@ cache:
 variables:
   # CI_DEBUG_TRACE: "true"
   # SECURE_LOG_LEVEL: "debug" # pretty helpful when you get errors like exit 1
+
+ 
 
 build:
   stage: build
