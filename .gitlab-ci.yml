@@ -12,7 +12,6 @@
 stages:
   - build
   - analyze
-  - test
   - push
   - dast
 
@@ -23,8 +22,7 @@ services:
 include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/DAST.gitlab-ci.yml
-  - template: Code-Quality.gitlab-ci.yml
-  - template: Security/License-Scanning.gitlab-ci.yml
+
   
 cache:
   policy: pull
