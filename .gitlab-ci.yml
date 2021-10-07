@@ -12,6 +12,7 @@
 stages:
   - build
   - analyze
+  - test
   - push
   - dast
 
