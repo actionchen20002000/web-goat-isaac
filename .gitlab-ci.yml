@@ -19,9 +19,7 @@ services:
   - name: docker:dind
     alias: dind
 
-include:
-  - template: Security/SAST.gitlab-ci.yml
-  - template: Security/DAST.gitlab-ci.yml
+
 
   
 cache:
@@ -73,6 +71,12 @@ build:
 #      - ./webgoat-lessons/cia/target/surefire-reports/TEST-*.xml
 #      - ./webgoat-lessons/sql-injection/target/surefire-reports/TEST-*.xml
 #      - ./webgoat-lessons/client-side-filtering/target/surefire-reports/TEST-*.xml
+
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/DAST.gitlab-ci.yml
+
 
 # editor complaint is okay
 sast:
