@@ -29,8 +29,8 @@ cache:
   - .m2/
 
 variables:
-  # CI_DEBUG_TRACE: "true"
-  # SECURE_LOG_LEVEL: "debug" # pretty helpful when you get errors like exit 1
+  CI_DEBUG_TRACE: "true"
+  SECURE_LOG_LEVEL: "debug" # pretty helpful when you get errors like exit 1
 
  
 
@@ -74,8 +74,8 @@ build:
 
 
 include:
-  - template: Security/SAST.gitlab-ci.yml
-  - template: Security/DAST.gitlab-ci.yml
+  - template: SAST.gitlab-ci.yml
+  - template: DAST.gitlab-ci.yml
 
 
 # editor complaint is okay
