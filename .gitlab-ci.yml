@@ -16,7 +16,7 @@ stages:
 
 include:
 # - template: Security/SAST.gitlab-ci.yml
-  - template: Security/DAST.gitlab-ci.yml
+  - template: DAST.gitlab-ci.yml
 
 cache:
   key: $CI_COMMIT_REF_SLUG
