@@ -130,9 +130,7 @@ dast:
     - export DAST_BROWSER_SCAN=true
     - export DAST_BROWSER_ACTION_TIMEOUT="30s"
     - DAST_BROWSER_NUMBER_OF_BROWSERS=3
-  
-  script:
-    - /analyzer run 
+
   #artifacts:
   #  paths: [gl-dast-debug-auth-report.html]
   #  when: always
