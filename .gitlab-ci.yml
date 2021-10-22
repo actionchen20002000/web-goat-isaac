@@ -15,7 +15,7 @@ stages:
   - dast
 
 include:
-# - template: Security/SAST.gitlab-ci.yml
+  - template: SAST.gitlab-ci.yml
   - template: DAST.gitlab-ci.yml
 
 cache:
@@ -29,7 +29,7 @@ variables:
 
 
 
-.build:
+build:
   stage: build
   image: maven:3-jdk-11-slim
   script:
@@ -42,30 +42,30 @@ variables:
       - "webgoat-server/Dockerfile"
       - "webgoat-server/target/"
       - ".m2/"
-  ##  reports:
-   #   junit:
-   #   - ./webgoat-integration-tests/target/surefire-reports/TEST-*.xml
-   #   - ./webwolf/target/surefire-reports/TEST-*.xml
-   #   - ./webgoat-container/target/surefire-reports/TEST-*.xml
-   #   - ./webgoat-lessons/jwt/target/surefire-reports/TEST-*.xml
-   #   - ./webgoat-lessons/bypass-restrictions/target/surefire-reports/TEST-*.xml
-   #   - ./webgoat-lessons/crypto/target/surefire-reports/TEST-*.xml
-   #   - ./webgoat-lessons/missing-function-ac/target/surefire-reports/TEST-*.xml
-   #   - ./webgoat-lessons/cross-site-scripting/target/surefire-reports/TEST-*.xml
-   #   - ./webgoat-lessons/xxe/target/surefire-reports/TEST-*.xml
-   #   - ./webgoat-lessons/insecure-deserialization/target/surefire-reports/TEST-*.xml
-   #   - ./webgoat-lessons/path-traversal/target/surefire-reports/TEST-*.xml
-   #   - ./webgoat-lessons/csrf/target/surefire-reports/TEST-*.xml      
-   #   - ./webgoat-lessons/chrome-dev-tools/target/surefire-reports/TEST-*.xml
-   #   - ./webgoat-lessons/vulnerable-components/target/surefire-reports/TEST-*.xml
-   #   - ./webgoat-lessons/challenge/target/surefire-reports/TEST-*.xml
-   #   - ./webgoat-lessons/http-proxies/target/surefire-reports/TEST-*.xml
-   #   - ./webgoat-lessons/cia/target/surefire-reports/TEST-*.xml
-   #   - ./webgoat-lessons/sql-injection/target/surefire-reports/TEST-*.xml
-   #   - ./webgoat-lessons/client-side-filtering/target/surefire-reports/TEST-*.xml
+    reports:
+      junit:
+        - ./webgoat-integration-tests/target/surefire-reports/TEST-*.xml
+        - ./webwolf/target/surefire-reports/TEST-*.xml
+        - ./webgoat-container/target/surefire-reports/TEST-*.xml
+        - ./webgoat-lessons/jwt/target/surefire-reports/TEST-*.xml
+        - ./webgoat-lessons/bypass-restrictions/target/surefire-reports/TEST-*.xml
+        - ./webgoat-lessons/crypto/target/surefire-reports/TEST-*.xml
+        - ./webgoat-lessons/missing-function-ac/target/surefire-reports/TEST-*.xml
+        - ./webgoat-lessons/cross-site-scripting/target/surefire-reports/TEST-*.xml
+        - ./webgoat-lessons/xxe/target/surefire-reports/TEST-*.xml
+        - ./webgoat-lessons/insecure-deserialization/target/surefire-reports/TEST-*.xml
+        - ./webgoat-lessons/path-traversal/target/surefire-reports/TEST-*.xml
+        - ./webgoat-lessons/csrf/target/surefire-reports/TEST-*.xml      
+        - ./webgoat-lessons/chrome-dev-tools/target/surefire-reports/TEST-*.xml
+        - ./webgoat-lessons/vulnerable-components/target/surefire-reports/TEST-*.xml
+        - ./webgoat-lessons/challenge/target/surefire-reports/TEST-*.xml
+        - ./webgoat-lessons/http-proxies/target/surefire-reports/TEST-*.xml
+        - ./webgoat-lessons/cia/target/surefire-reports/TEST-*.xml
+        - ./webgoat-lessons/sql-injection/target/surefire-reports/TEST-*.xml
+        - ./webgoat-lessons/client-side-filtering/target/surefire-reports/TEST-*.xml
 
 # there is some trouble with spotbugs-sast about the hierarchical poms, so you might see this fail
-.spotbugs-sast:
+spotbugs-sast:
   dependencies:
     - build
   variables:
@@ -77,7 +77,7 @@ variables:
       sast: gl-sast-report.json
 
 
-.push:
+push:
   services:
   - name: docker:20.10.6-dind
   image: docker:20.10.6
@@ -116,8 +116,6 @@ dast:
     DAST_BROWSER_NUMBER_OF_BROWSERS: 3
   before_script:
     - curl -vvv POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc" 
-    
-
   artifacts:
     paths: [gl-dast-debug-auth-report.html]
     when: always
