@@ -118,9 +118,9 @@ dast:
     - curl -vvv POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc" 
     
 
-  #artifacts:
-  #  paths: [gl-dast-debug-auth-report.html]
-  #  when: always
+  artifacts:
+    paths: [gl-dast-debug-auth-report.html]
+    when: always
   services:
   - name: $CI_REGISTRY_IMAGE:latest
     alias: webgoat
