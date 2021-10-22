@@ -9,6 +9,8 @@ PlentyResults - DAST scanner with the browser-based crawling resulting in plenty
 Semgrep-Experimental - Using a different configuration from the Semgrep rules repository (owasp-top-ten) which uses Semgrep's image which already knows GTLB results output format
 Should there be other branches, ignore them, experimental stuff from Owner. 
 
+This project avoids deployment into a K8s cluster. It is not a recommended way to use the app to test as a service but this is convenient for a start - educational purpose only.
+
 Speed up builds to faster get DAST going:  
 if you do not want to see test results in the Tests widget then use -DskipResults in the build job of each branch. Creating the test results takes a bit of time  
      
