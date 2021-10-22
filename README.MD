@@ -4,8 +4,10 @@ The focus is on using DAST in different branches but the SAST scanners are runni
 
 # What are the different branches about ?
 main - basically this README only and the original code, no GitLab pipeline file.  
-FewResults - DAST scanner in the standard configuration with limited results.  
-PlentyResults - DAST scanner with the browser-based crawling resulting in plenty of results. Run can last like 120 mins and requires to increase the runner timeout from the standard of 1h to 3 hour
+FewResults - DAST scanner in the standard configuration with limited results. 
+PlentyResults - DAST scanner with the browser-based crawling resulting in plenty of results. Run can last like 120 mins and requires to increase the runner timeout from the standard of 1h to 3 hour. 
+Semgrep-Experimental - Using a different configuration from the Semgrep rules repository (owasp-top-ten) which uses Semgrep's image which already knows GTLB results output format
+Should there be other branches, ignore them, experimental stuff from Owner. 
 
 Both branches above: if you want to see test results in the Tests widget then remove -DskipResults in the build job of each branch. Creating the test results takes a bit of time.   
      
