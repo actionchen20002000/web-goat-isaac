@@ -29,7 +29,7 @@ variables:
 
 
 
-build:
+.build:
   stage: build
   image: maven:3-jdk-11-slim
   script:
@@ -117,9 +117,9 @@ dast:
   before_script:
     - curl -vvv -X POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc"   
   script: echo "In case of error you might want to set SECURE_LOG_LEVEL to a value of debug "
-  artifacts:
-    paths: [gl-dast-debug-auth-report.html]
-    when: always
+  #artifacts:
+  #  paths: [gl-dast-debug-auth-report.html]
+  #  when: always
   services:
   - name: $CI_REGISTRY_IMAGE:latest
     alias: webgoat
