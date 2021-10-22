@@ -9,7 +9,8 @@ PlentyResults - DAST scanner with the browser-based crawling resulting in plenty
 Semgrep-Experimental - Using a different configuration from the Semgrep rules repository (owasp-top-ten) which uses Semgrep's image which already knows GTLB results output format
 Should there be other branches, ignore them, experimental stuff from Owner. 
 
-Both branches above: if you want to see test results in the Tests widget then remove -DskipResults in the build job of each branch. Creating the test results takes a bit of time.   
+Speed up builds to faster get DAST going:  
+if you do not want to see test results in the Tests widget then use -DskipResults in the build job of each branch. Creating the test results takes a bit of time  
      
 
 # Original Readme - WebGoat 8: A deliberately insecure Web Application
