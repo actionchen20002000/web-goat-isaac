@@ -115,10 +115,24 @@ dast:
     DAST_BROWSER_ACTION_TIMEOUT: "30s"
     DAST_BROWSER_NUMBER_OF_BROWSERS: 3
   before_script:
-    - curl -vvv POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc"   
+    - curl -vvv POST -d "username=testtest&password=password&matchingPassword=password&agree=agree&submit=Submit" "http://webgoat:8080/WebGoat/register.mvc" 
+    - export DAST_WEBSITE=http://webgoat:8080/WebGoat/ 
+    - export DAST_AUTH_URL=http://webgoat:8080/WebGoat/login
+    - export DAST_EXCLUDE_URLS=http://webgoat:8080/WebGoat/logout,http://webgoat:8080/WebGoat/login,http://webgoat:8080/WebGoat/login?logout
+    - export DAST_FULL_SCAN_ENABLED=true
+    - export DAST_USERNAME=testtest
+    - export DAST_PASSWORD=password # use protected/masked variables, this is only for demonstration purposes
+    - export DAST_USERNAME_FIELD=username
+    - export DAST_PASSWORD_FIELD=password
+    - export DAST_AUTH_REPORT=true
+    - export DAST_AUTH_VERIFICATION_URL="http://webgoat:8080/WebGoat/start.mvc#lesson/WebGoatIntroduction.lesson"
+    #- export DAST_ZAP_USE_AJAX_SPIDER=true
+    - export DAST_BROWSER_SCAN=true
+    - export DAST_BROWSER_ACTION_TIMEOUT="30s"
+    - DAST_BROWSER_NUMBER_OF_BROWSERS=3
+  
   script:
     - /analyzer run 
-  script: echo "In case of error you might want to set SECURE_LOG_LEVEL to a value of debug "
   #artifacts:
   #  paths: [gl-dast-debug-auth-report.html]
   #  when: always
