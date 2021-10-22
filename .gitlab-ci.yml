@@ -96,7 +96,7 @@ push:
 
 dast:
   stage: dast
-#  needs: [push]
+  needs: [push]
   cache: {}
   variables:
     DAST_WEBSITE: http://webgoat:8080/WebGoat/
