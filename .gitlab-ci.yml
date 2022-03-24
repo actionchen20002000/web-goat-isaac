@@ -33,7 +33,6 @@ cache:
 variables:
   CI_DEBUG_TRACE: "true"
   SECURE_LOG_LEVEL: "debug" # pretty helpful when you get errors like exit 1
-  MAVEN_REPO_PATH: "./.m2"
 
  
 
