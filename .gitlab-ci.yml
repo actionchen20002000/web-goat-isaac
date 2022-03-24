@@ -38,7 +38,7 @@ variables:
 
 build:
   stage: build
-  image: maven:3-jdk-11-slim
+  image: maven:3-jdk-8-slim
   script:
     - mvn clean install  # -DskipTests to shorten the build
     - mvn package -Dmaven.repo.local=./.m2 # -DskipTests
