@@ -98,7 +98,7 @@ spotbugs-sast:
   dependencies:
     - build
   script:
-    - /analyzer run -compile=false
+    - /analyzer run # -compile=false
   variables:
     CI_DEBUG_TRACE: "true"
     MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2/
