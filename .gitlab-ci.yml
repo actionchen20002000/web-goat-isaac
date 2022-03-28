@@ -98,6 +98,7 @@ spotbugs-sast:
   dependencies:
     - build
   script:
+    - asdf install java adoptopenjdk-11.0.14+9
     - /analyzer run # -compile=false
   variables:
     CI_DEBUG_TRACE: "true"
