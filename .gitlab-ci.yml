@@ -40,8 +40,8 @@ build:
   stage: build
   image: maven:3-jdk-11-slim
   script:
-    - mvn clean install  # -DskipTests to shorten the build
-    - mvn package -Dmaven.repo.local=./.m2 # -DskipTests
+    - mvn clean install -DskipTests=true # -DskipTests to shorten the build
+    - mvn package -DskipTests=true -Dmaven.repo.local=./.m2 # -DskipTests
   cache:
     policy: push
     key: ${CI_COMMIT_SHA}
@@ -102,7 +102,7 @@ spotbugs-sast:
   variables:
     CI_DEBUG_TRACE: "true"
     MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2/
-    JAVA_HOME: "/usr/local/openjdk-11/bin/java"
+    JAVA_HOME: "/usr/local/openjdk-11/"
   artifacts:
     reports:
       sast: gl-sast-report.json
