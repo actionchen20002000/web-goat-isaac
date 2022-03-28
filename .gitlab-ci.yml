@@ -102,6 +102,7 @@ spotbugs-sast:
   variables:
     CI_DEBUG_TRACE: "true"
     MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2/
+    JAVA_HOME: "/usr/local/openjdk-11/bin/java"
   artifacts:
     reports:
       sast: gl-sast-report.json
