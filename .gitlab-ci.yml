@@ -12,10 +12,8 @@
 
 stages:
   - build
-  - analyze
   - test
   - push
-  - dast
 
 services:
   - name: docker:dind
