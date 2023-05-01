@@ -14,7 +14,7 @@ stages:
   - build
   - analyze
   - test
-  - push
+  - production
   - dast
 
 services:
@@ -43,7 +43,7 @@ build:
     - mvn clean install -DskipTests=true # -DskipTests to shorten the build
     - mvn package -DskipTests=true -Dmaven.repo.local=./.m2 # -DskipTests
   cache:
-    policy: push
+    policy: production
     key: ${CI_COMMIT_SHA}
     paths:
       - .m2
@@ -111,13 +111,13 @@ spotbugs-sast:
       - gl-sast-report.json
 
 
-push:
+production:
   services:
   - name: docker:20.10.6-dind
   image: docker:20.10.6
   variables:
     DOCKER_DRIVER: overlay2 # not sure this is needed
-  stage: push
+  stage: production
   needs: [build]
   script:
     - cd webgoat-server
@@ -129,7 +129,7 @@ push:
 
 # editor complains ?
 dast:
-  needs: [push]
+  needs: [production]
   variables:
     DAST_WEBSITE: http://webgoat:8080/WebGoat/
     DAST_AUTH_URL: http://webgoat:8080/WebGoat/login
